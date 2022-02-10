@@ -13,13 +13,13 @@
 
 ## Usage
 
-####1. Install all the necessary packages
+#### 1. Install all the necessary packages
 
 ```bash
 pip install django djangorestframework
 ```
 
-####2. Deploy the web application
+#### 2. Deploy the web application
 
 ```bash
 python manage.py runserver
