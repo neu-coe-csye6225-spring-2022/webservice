@@ -3,7 +3,6 @@ from rest_framework.validators import UniqueValidator
 from django.contrib.auth.models import User
 
 from app.models import Healthz
-from util.bcrypt_salt_hash_pw import BcryptUtil
 
 
 class HealthzSerializer(serializers.ModelSerializer):
@@ -13,7 +12,6 @@ class HealthzSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    id = serializers.UUIDField(read_only=True, required=False, format='hex_verbose')
     first_name = serializers.CharField()
     last_name = serializers.CharField()
     password = serializers.CharField(write_only=True)
@@ -26,11 +24,13 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create_user(username=validated_data['username'],
                                         email=validated_data['username'],
-                                        password=BcryptUtil.get_hashed_pw(validated_data['password']))
+                                        password=validated_data['password'],
+                                        first_name=validated_data['first_name'],
+                                        last_name=validated_data['last_name'])
 
         return user
 
     class Meta:
         model = User
-        fields = ('id', 'first_name', 'last_name', 'password', 'username',
-                  'account_created', 'account_updated')
+        fields = (
+            'first_name', 'last_name', 'password', 'username', 'date_joined', 'account_created', 'account_updated')
