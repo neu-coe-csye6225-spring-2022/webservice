@@ -2,12 +2,10 @@ from django.shortcuts import render
 
 # Create your views here.
 from rest_framework import viewsets, status
-from rest_framework.authentication import BasicAuthentication, TokenAuthentication
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
-
-from django.utils import timezone
 
 from app.serializers import HealthzSerializer, UserSerializer
 from app.models import Healthz
@@ -78,7 +76,7 @@ class UserManage(APIView):
                 # elif k == 'username':
                 #     continue
                 else:
-                    Response(status=status.HTTP_400_BAD_REQUEST)
+                    return Response(status=status.HTTP_400_BAD_REQUEST)
 
             user.save()
             return Response(status=status.HTTP_204_NO_CONTENT)
