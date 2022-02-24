@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 from rest_framework import viewsets, status
-from rest_framework.authentication import TokenAuthentication
+from rest_framework.authentication import TokenAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -44,7 +44,7 @@ class UserCreate(APIView):
 
 
 class UserManage(APIView):
-    authentication_classes = [TokenAuthentication]
+    authentication_classes = [TokenAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get(self, request, format='json'):
@@ -60,7 +60,7 @@ class UserManage(APIView):
 
         return Response(output, status=status.HTTP_200_OK)
 
-    def post(self, request, format='json'):
+    def put(self, request, format='json'):
         user = request.user
         if request.data is not None and user:
             for k, v in request.data.items():
