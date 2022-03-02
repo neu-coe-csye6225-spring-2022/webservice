@@ -16,7 +16,7 @@
 #### 1. Install all the necessary packages
 
 ```bash
-pip install django djangorestframework bcrypt
+pip install django djangorestframework bcrypt mysqlclient
 ```
 
 #### 2. Deploy the web application
