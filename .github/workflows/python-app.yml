@@ -27,7 +27,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Verify unittest DB exists
-      run: mysql --host 127.0.0.1 --port 3306 -uroot -e "SHOW DATABASES LIKE 'webservice_db'"
+      run: mysql --host 127.0.0.1 --port 3306 -u root --password=abc12345 -e "SHOW DATABASES LIKE 'webservice_db'"
     - name: Set up Python 3.8
       uses: actions/setup-python@v2
       with:
