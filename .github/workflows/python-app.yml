@@ -14,17 +14,25 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: abc12345
+          MYSQL_DATABASE: webservice_db
+        ports: [ '3306:3306' ]
+
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python 3.8
       uses: actions/setup-python@v2
       with:
-        python-version: "3.8"
+        python-version: $
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install flake8 pytest django djangorestframework bcrypt
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        pip install flake8 pytest django djangorestframework bcrypt mysqlclient
+
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
@@ -33,5 +41,6 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with python unittest
       run: |
+        python manage.py migrate
         python manage.py test
 
