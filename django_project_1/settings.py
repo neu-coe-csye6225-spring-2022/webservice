@@ -87,7 +87,7 @@ DATABASES = {
         'NAME': 'webservice_db',
         'USER': 'root',
         'PASSWORD': 'abc12345',
-        'HOST': 'localhost',
+        'HOST': '127.0.0.1',
         'PORT': '3306',
     }
 }

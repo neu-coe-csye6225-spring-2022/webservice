@@ -16,13 +16,18 @@ jobs:
 
     services:
       mysql:
-        image: mysql:5.7
+        image: mysql:8.0.21
         env:
           MYSQL_ROOT_PASSWORD: abc12345
           MYSQL_DATABASE: webservice_db
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
     - uses: actions/checkout@v2
+    - name: Verify unittest DB exists
+      run: mysql --host 127.0.0.1 --port 3306 -uroot -e "SHOW DATABASES LIKE 'webservice_db'"
     - name: Set up Python 3.8
       uses: actions/setup-python@v2
       with:
