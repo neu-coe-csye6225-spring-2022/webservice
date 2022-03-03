@@ -1,0 +1,45 @@
+{
+    "variables": {
+        "aws_profile": "",
+        "aws_access_key": "",
+        "aws_secret_key": "",
+        "aws_region": "",
+        "subnet_id": "",
+        "source_ami": "",
+        "ssh_username": "ec2-user",
+        "aws_dev_account_id": "",
+        "aws_demo_account_id": ""
+    },
+    "builders": [
+        {
+            "type": "amazon-ebs",
+            "profile": "{{user `aws_profile`}}",
+            "access_key": "{{user `aws_access_key`}}",
+            "secret_key": "{{user `aws_secret_key`}}",
+            "region": "{{user `aws_region`}}",
+            "source_ami": "{{user `source_ami`}}",
+            "subnet_id": "{{user `subnet_id`}}",
+            "instance_type": "t2.micro",
+            "ssh_username": "{{user `ssh_username`}}",
+            "ami_users": [
+                "{{user `aws_dev_account_id`}}",
+                "{{user `aws_demo_account_id`}}"
+            ],
+            "ami_name": "csye6225_spring2022_yiqing_{{timestamp}}",
+            "ami_description": "Amazon Linux 2 AMI (HVM) for CSYE 6225"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "file",
+            "source": "./webservice.zip",
+            "destination": "/tmp/webservice.zip"
+        },
+        {
+            "type": "shell",
+            "scripts": [
+                "./deploy_centos.sh"
+            ]
+        }
+    ]
+}
