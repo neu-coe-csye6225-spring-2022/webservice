@@ -19,16 +19,16 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
           aws-region: us-east-1
 
       - name: Build Artifact
         uses: hashicorp/packer-github-actions@master
         with:
           command: build
-          arguments: "-color=false -on-error=abort -var=aws_access_key=${{ secrets.AWS_ACCESS_KEY_ID }}
-           -var=aws_secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }} -var-file=./ami_vars.json"
+          arguments: "-color=false -on-error=abort -var=aws_access_key=${{ secrets.AWS_ACCESS_KEY }}
+           -var=aws_secret_key=${{ secrets.AWS_SECRET_KEY }} -var-file=./ami_vars.json"
           target: ./ami.json
         env:
           PACKER_LOG: 1
