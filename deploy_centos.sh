@@ -1,0 +1,49 @@
+DB_PW="abc12345"
+
+# Install & Setup MySQL
+sudo yum install https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm -y
+sudo yum update -y
+sudo amazon-linux-extras install epel -y
+sudo rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2022
+sudo yum install mysql-community-server -y
+sudo systemctl enable --now mysqld
+
+TEMP_PW=$(sudo grep 'temporary password' /var/log/mysqld.log)
+PATTERN="root@localhost: "
+TEMP_PW=${TEMP_PW#*$PATTERN}
+echo $TEMP_PW
+
+sudo sed -i 's/127\.0\.0\.1/0\.0\.0\.0/g' /etc/my.cnf
+mysql -u root --connect-expired-password --password="$TEMP_PW" <<-EOF
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'amazon-linux-2-Yiqing@';
+flush privileges;
+UNINSTALL COMPONENT 'file://component_validate_password';
+ALTER USER 'root'@'localhost' IDENTIFIED BY '$DB_PW';
+flush privileges;
+EOF
+
+mysql -u root --password="$DB_PW" -e 'USE mysql; UPDATE `user` SET `Host`="%" WHERE `User`="root" AND `Host`="localhost"; DELETE FROM `user` WHERE `Host` != "%" AND `User`="root"; FLUSH PRIVILEGES; CREATE DATABASE webservice_db;'
+
+sudo service mysqld restart
+
+# Install python3 dev & necessary packages in virtual env
+sudo yum group install "Development Tools" -y
+export CFLAGS="-std=c99"
+sudo yum install python3-devel mysql-devel -y
+
+sudo pip3 install virtualenv
+
+virtualenv newenv
+source newenv/bin/activate
+pip3 install pytest django djangorestframework bcrypt mysqlclient
+
+
+# Automatically start web service after login
+crontab -l > mycron
+echo "@reboot sh /home/ec2-user/webservice/start_webservice_centos.sh" >> mycron
+crontab mycron
+rm mycron
+
+# Start webservice
+./start_webservice_centos.sh
+
