@@ -33,6 +33,8 @@ sudo yum install python3-devel mysql-devel -y
 
 sudo pip3 install virtualenv
 
+cd /home/ec2-user/webservice/
+
 virtualenv newenv
 source newenv/bin/activate
 pip3 install pytest django djangorestframework bcrypt mysqlclient
