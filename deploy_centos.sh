@@ -1,3 +1,14 @@
+cd ~
+mkdir webservice
+cp /tmp/webservice.zip /home/ec2-user/webservice/webservice.zip
+
+sudo yum install unzip -y
+
+cd webservice
+unzip webservice.zip
+ls -al
+
+
 DB_PW="abc12345"
 
 # Install & Setup MySQL
@@ -32,8 +43,6 @@ export CFLAGS="-std=c99"
 sudo yum install python3-devel mysql-devel -y
 
 sudo pip3 install virtualenv
-
-cd /home/ec2-user/webservice/
 
 virtualenv newenv
 source newenv/bin/activate
