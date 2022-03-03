@@ -1,4 +1,4 @@
-cd ~
+cd /home/ec2-user/
 mkdir webservice
 cp /tmp/webservice.zip /home/ec2-user/webservice/webservice.zip
 
