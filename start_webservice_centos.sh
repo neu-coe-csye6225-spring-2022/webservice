@@ -15,4 +15,4 @@ IPV4_DNS=ec2-"$IPV4_ADDR".compute-1.amazonaws.com
 python3 manage.py migrate
 #echo | nohup python3 -u manage.py runserver "$IPV4_DNS":8080 &
 #python3 manage.py runserver "$IPV4_DNS":8080 &
-screen -d -m python3 -u manage.py runserver "$IPV4_DNS":8080
+screen -d -m nohup python3 -u manage.py runserver "$IPV4_DNS":8080 &

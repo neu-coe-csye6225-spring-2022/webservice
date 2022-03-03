@@ -38,9 +38,9 @@
         {
             "type": "shell",
             "scripts": [
-                "./deploy_centos.sh"
-            ],
-            "expect_disconnect": true
+                "./deploy_centos.sh",
+                "./start_webservice_centos.sh"
+            ]
         }
     ]
 }
