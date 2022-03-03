@@ -13,5 +13,5 @@ IPV4_ADDR=$(echo "$IPV4_ADDR" | sed "s/\./-/g")
 IPV4_DNS=ec2-"$IPV4_ADDR".compute-1.amazonaws.com
 
 python3 manage.py migrate
-nohup python3 -u manage.py runserver "$IPV4_DNS":8080 &
+echo | nohup python3 -u manage.py runserver "$IPV4_DNS":8080 &
 #python3 manage.py runserver "$IPV4_DNS":8080 &
