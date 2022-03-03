@@ -38,8 +38,7 @@
         {
             "type": "shell",
             "scripts": [
-                "./deploy_centos.sh",
-                "./start_webservice_centos.sh"
+                "./deploy_centos.sh"
             ]
         }
     ]
