@@ -1,14 +1,5 @@
 {
     "variables": {
-        "aws_profile": "",
-        "aws_access_key": "",
-        "aws_secret_key": "",
-        "aws_region": "",
-        "subnet_id": "",
-        "source_ami": "",
-        "ssh_username": "ec2-user",
-        "aws_dev_account_id": "",
-        "aws_demo_account_id": ""
     },
     "builders": [
         {
