@@ -7,6 +7,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+from django.utils import timezone
+
 from app.serializers import HealthzSerializer, UserSerializer
 from app.models import Healthz
 
@@ -78,6 +80,7 @@ class UserManage(APIView):
                 else:
                     return Response(status=status.HTTP_400_BAD_REQUEST)
 
+            user.profile.account_updated = timezone.now().isoformat()
             user.save()
             return Response(status=status.HTTP_204_NO_CONTENT)
 
