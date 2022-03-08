@@ -4,7 +4,7 @@
     "aws_access_key": "",
     "aws_secret_key": "",
     "subnet_id": "subnet-05804b8bc75402823",
-    "source_ami": "ami-048ff3da02834afdc",
+    "source_ami": "ami-0c293f3f676ec4f90",
     "aws_dev_account_id": "420411006943",
     "aws_demo_account_id": "758806483958"
 }
