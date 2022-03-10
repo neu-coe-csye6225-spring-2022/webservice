@@ -1,20 +1,85 @@
 from django.shortcuts import render
 
 # Create your views here.
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, parsers
 from rest_framework.authentication import TokenAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from app.serializers import HealthzSerializer, UserSerializer
-from app.models import Healthz
+from django.utils import timezone
+
+from app.serializers import HealthzSerializer, UserSerializer, ImageSerializer
+from app.models import Healthz, Image
 
 
 class HealthzViewSet(viewsets.ModelViewSet):
     queryset = Healthz.objects.all()
     serializer_class = HealthzSerializer
     http_method_names = ['get']
+
+
+class ImageViewSet(viewsets.ModelViewSet):
+    authentication_classes = [TokenAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+    queryset = Image.objects.all()
+    serializer_class = ImageSerializer
+    parser_classes = [parsers.MultiPartParser, parsers.FormParser]
+    http_method_names = ['get', 'post', 'delete']
+
+    def attempt_create(self, count, request, *args, **kwargs):
+        user = request.user
+        if user:
+            request.data['user_id'] = user.profile.ids
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            self.perform_create(serializer)
+            headers = self.get_success_headers(serializer.data)
+            output = {
+                'file_name': serializer.data['file_name'],
+                'id': serializer.data['ids'],
+                'url': serializer.data['image'],
+                'upload_date': serializer.data['updated_date'],
+                'user_id': serializer.data['user_id'],
+            }
+            return Response(output, status=status.HTTP_201_CREATED, headers=headers)
+        elif count < 5:
+            print("delete the existed image and upload")
+            Image.objects.get(user_id=request.data['user_id']).delete()
+            return self.attempt_create(count + 1, request, *args, **kwargs)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    def create(self, request, *args, **kwargs):
+        return self.attempt_create(0, request, args, kwargs)
+
+    def list(self, request, *args, **kwargs):
+        user = request.user
+        if user:
+            user_id = user.profile.ids
+            for img_obj in Image.objects.all():
+                if img_obj.user_id == user_id:
+                    serializer = self.get_serializer(img_obj)
+                    output = {
+                        'file_name': serializer.data['file_name'],
+                        'id': serializer.data['ids'],
+                        'url': serializer.data['image'],
+                        'upload_date': serializer.data['updated_date'],
+                        'user_id': serializer.data['user_id'],
+                    }
+                    return Response(output, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def destroy(self, request, *args, **kwargs):
+        user = request.user
+        if user:
+            user_id = user.profile.ids
+            for img_obj in Image.objects.all():
+                print(img_obj.user_id)
+                if img_obj.user_id == user_id:
+                    self.perform_destroy(img_obj)
+                    return Response(status=status.HTTP_204_NO_CONTENT)
+
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 class UserCreate(APIView):
@@ -78,9 +143,8 @@ class UserManage(APIView):
                 else:
                     return Response(status=status.HTTP_400_BAD_REQUEST)
 
+            user.profile.account_updated = timezone.now().isoformat()
             user.save()
             return Response(status=status.HTTP_204_NO_CONTENT)
 
         return Response(status=status.HTTP_400_BAD_REQUEST)
-
-

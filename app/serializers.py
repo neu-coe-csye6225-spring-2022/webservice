@@ -2,13 +2,19 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.models import User
 
-from app.models import Healthz
+from app.models import Healthz, Image
 
 
 class HealthzSerializer(serializers.ModelSerializer):
     class Meta:
         model = Healthz
         fields = ()
+
+
+class ImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Image
+        fields = '__all__'
 
 
 class UserSerializer(serializers.ModelSerializer):
