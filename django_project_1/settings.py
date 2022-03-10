@@ -85,10 +85,10 @@ WSGI_APPLICATION = 'django_project_1.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'webservice_db',
-        'USER': 'root',
-        'PASSWORD': 'abc12345',
-        'HOST': '127.0.0.1',
+        "NAME": "webservice_db",
+        "USER": "root",
+        "PASSWORD": "abc12345",
+        "HOST": "127.0.0.1",
         'PORT': '3306',
     }
 }
@@ -152,7 +152,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AWS_ACCESS_KEY_ID = ''
 AWS_SECRET_ACCESS_KEY = ''
 
-AWS_STORAGE_BUCKET_NAME = ''
+AWS_STORAGE_BUCKET_NAME = ""
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 AWS_S3_REGION_NAME = 'us-east-1'
 AWS_S3_FILE_OVERWRITE = True

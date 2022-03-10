@@ -56,6 +56,6 @@ crontab mycron
 rm mycron
 
 # Start webservice
-./start_webservice_centos.sh
+#./start_webservice_centos.sh
 #sudo reboot
 #sudo systemctl restart crond.service
