@@ -46,7 +46,7 @@ sudo pip3 install virtualenv
 
 virtualenv newenv
 source newenv/bin/activate
-pip3 install pytest django djangorestframework bcrypt mysqlclient
+pip3 install pytest django djangorestframework bcrypt mysqlclient boto3 django-storages django-s3direct
 
 
 # Automatically start web service after login
