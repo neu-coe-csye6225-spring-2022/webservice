@@ -1,7 +1,6 @@
 # CSYE 6225 Web Service
 
 *Yiqing Huang 001525629 huang.yiqin@northeastern.edu*
-demo
 
 
 ## Prerequisites
