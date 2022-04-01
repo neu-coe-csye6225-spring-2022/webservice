@@ -12,5 +12,5 @@ class Test(TestCase):
         pass
 
     def test_healthz(self):
-        response = self.client.get('/health/')
+        response = self.client.get('/healthz/')
         self.assertEqual(response.status_code, 200)
