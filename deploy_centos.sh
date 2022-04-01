@@ -44,6 +44,7 @@ $CODEDEPLOY_BIN stop
 sudo yum erase codedeploy-agent -y
 
 sudo yum install ruby wget -y
+cd /home/ec2-user
 wget https://aws-codedeploy-us-east-1.s3.us-east-1.amazonaws.com/latest/install
 chmod +x ./install
 sudo ./install auto
@@ -56,6 +57,7 @@ sudo yum install python3-devel mysql-devel -y
 
 sudo pip3 install virtualenv
 
+cd /home/ec2-user/webservice
 virtualenv newenv
 source newenv/bin/activate
 pip3 install pytest django djangorestframework bcrypt mysqlclient boto3 django-storages django-s3direct
