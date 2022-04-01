@@ -4,7 +4,7 @@ from rest_framework import routers
 from app.views import HealthzViewSet, UserCreate, UserManage, ImageViewSet
 
 routers_healthz = routers.DefaultRouter()
-routers_healthz.register(r'health', HealthzViewSet)
+routers_healthz.register(r'healthz', HealthzViewSet)
 routers_img = routers.DefaultRouter()
 routers_img.register(r'v1/user/self/pic', ImageViewSet)
 

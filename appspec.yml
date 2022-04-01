@@ -15,11 +15,11 @@ hooks:
   #   - location: ./code_deploy/install_app.sh
   #     timeout: 180
   #     runas: ec2-user
-  # Test:
+  # AfterInstall:
   #   - location: ./code_deploy/test.sh
   #     timeout: 180
   #     runas: ec2-user
-  StartService:
+  ApplicationStart:
     - location: ./start_webservice_centos.sh
       timeout: 180
       runas: ec2-user
