@@ -37,6 +37,18 @@ sudo amazon-linux-extras install epel -y
 #
 #sudo service mysqld restart
 
+
+# Install AWS CodeDeploy
+CODEDEPLOY_BIN="/opt/codedeploy-agent/bin/codedeploy-agent"
+$CODEDEPLOY_BIN stop
+sudo yum erase codedeploy-agent -y
+
+sudo yum install ruby wget -y
+wget https://aws-codedeploy-us-east-1.s3.us-east-1.amazonaws.com/latest/install
+chmod +x ./install
+sudo ./install auto
+sudo service codedeploy-agent status
+
 # Install python3 dev & necessary packages in virtual env
 sudo yum group install "Development Tools" -y
 export CFLAGS="-std=c99"

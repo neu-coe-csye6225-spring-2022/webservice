@@ -1,5 +1,10 @@
 name: Deploy Build AMI
 
+env:
+  ARTIFACT_NAME: webservice.zip
+  APPLICATION_NAME: csye6225-webapp
+  DEPLOYMENT_GROUP_NAME: csye6225-webapp-deployment
+
 on:
   push:
     branches: [ main ]
@@ -14,7 +19,9 @@ jobs:
 
       - name: zip files
         run: |
-          zip -r webservice.zip ./
+          zip -r ${{ env.ARTIFACT_NAME }} ./*
+          mkdir codedeploy_artifact
+          mv ${{ env.ARTIFACT_NAME }} ./codedeploy_artifact
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -32,3 +39,18 @@ jobs:
           target: ./ami.json
         env:
           PACKER_LOG: 1
+
+      - name: Upload Artifact to S3
+        run: |
+          aws s3 sync ./codedeploy_artifact s3://${{ secrets.S3_BUCKET_NAME }}
+
+      - name: CodeDeploy
+        run: |
+          output=$(aws deploy create-deployment --application-name ${{ env.APPLICATION_NAME }} --deployment-group-name ${{ env.DEPLOYMENT_GROUP_NAME }} --s3-location bucket=${{ secrets.S3_BUCKET_NAME }},key=webservice.zip,bundleType=zip --region us-east-1 --output json)
+          echo $output
+          dId=$(echo $output | jq -r '.deploymentId')
+          aws deploy wait deployment-successful --deployment-id $dId
+
+
+
+

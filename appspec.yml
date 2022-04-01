@@ -1,0 +1,25 @@
+version: 0.0
+os: linux
+
+files:
+  - source: ./app
+    destination: /home/ec2-user/webservice
+
+
+hooks:
+  BeforeInstall:
+    - location: ./code_deploy/pre_install.sh
+      timeout: 180
+      runas: ec2-user
+  # Install:
+  #   - location: ./code_deploy/install_app.sh
+  #     timeout: 180
+  #     runas: ec2-user
+  # Test:
+  #   - location: ./code_deploy/test.sh
+  #     timeout: 180
+  #     runas: ec2-user
+  StartService:
+    - location: ./start_webservice_centos.sh
+      timeout: 180
+      runas: ec2-user
