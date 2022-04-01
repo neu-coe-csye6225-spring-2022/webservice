@@ -3,7 +3,7 @@ os: linux
 
 files:
   - source: ./app
-    destination: /home/ec2-user/webservice
+    destination: /home/ec2-user/webservice/app
 
 
 hooks:
