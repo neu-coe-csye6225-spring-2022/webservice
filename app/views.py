@@ -1,4 +1,4 @@
-from django.shortcuts import render
+import statsd
 
 # Create your views here.
 from rest_framework import viewsets, status, parsers
@@ -12,11 +12,17 @@ from django.utils import timezone
 from app.serializers import HealthzSerializer, UserSerializer, ImageSerializer
 from app.models import Healthz, Image
 
+metric_counter = statsd.client.StatsClient('localhost', 8125)
+
 
 class HealthzViewSet(viewsets.ModelViewSet):
     queryset = Healthz.objects.all()
     serializer_class = HealthzSerializer
     http_method_names = ['get']
+
+    def list(self, request, *args, **kwargs):
+        metric_counter.incr("health_endpoint")
+        return Response([], status=status.HTTP_200_OK)
 
 
 class ImageViewSet(viewsets.ModelViewSet):
@@ -50,9 +56,11 @@ class ImageViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def create(self, request, *args, **kwargs):
+        metric_counter.incr("add_or_update_a_profile_pic")
         return self.attempt_create(0, request, args, kwargs)
 
     def list(self, request, *args, **kwargs):
+        metric_counter.incr("get_profile_image")
         user = request.user
         if user:
             user_id = user.profile.ids
@@ -70,6 +78,7 @@ class ImageViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     def destroy(self, request, *args, **kwargs):
+        metric_counter.incr("delete_profile_pic")
         user = request.user
         if user:
             user_id = user.profile.ids
@@ -88,6 +97,7 @@ class UserCreate(APIView):
     """
 
     def post(self, request, format='json'):
+        metric_counter.incr("create_a_user")
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
@@ -113,6 +123,7 @@ class UserManage(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, format='json'):
+        metric_counter.incr("get_user_information")
         user = request.user
         output = {}
         if user:
@@ -126,6 +137,7 @@ class UserManage(APIView):
         return Response(output, status=status.HTTP_200_OK)
 
     def put(self, request, format='json'):
+        metric_counter.incr("update_user_information")
         user = request.user
         if request.data is not None and user:
             for k, v in request.data.items():

@@ -50,6 +50,12 @@ chmod +x ./install
 sudo ./install auto
 sudo service codedeploy-agent status
 
+# Install AWS CloudWatch Agent
+sudo yum install amazon-cloudwatch-agent
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/home/ec2-user/webservice/cloudwatch-config.json -s
+sudo systemctl start amazon-cloudwatch-agent.service
+sudo systemctl enable amazon-cloudwatch-agent.service
+
 # Install python3 dev & necessary packages in virtual env
 sudo yum group install "Development Tools" -y
 export CFLAGS="-std=c99"
@@ -60,7 +66,7 @@ sudo pip3 install virtualenv
 cd /home/ec2-user/webservice
 virtualenv newenv
 source newenv/bin/activate
-pip3 install pytest django djangorestframework bcrypt mysqlclient boto3 django-storages django-s3direct
+pip3 install pytest django djangorestframework bcrypt mysqlclient boto3 django-storages django-s3direct statsd
 
 
 # Automatically start web service after login

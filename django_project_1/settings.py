@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -161,3 +162,41 @@ AWS_S3_VERIFY = True
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 # AWS_S3_ENDPOINT_URL = 'https://s3.' + AWS_S3_REGION_NAME + '.amazonaws.com'
 
+
+# Django Logging Information
+LOGGING = {
+    # Define the logging version
+    'version': 1,
+    # Enable the existing loggers
+    'disable_existing_loggers': False,
+
+    'formatters': {
+        'timestamp': {
+            'format': '{asctime} {levelname} {message}',
+            'style': '{',
+        },
+    },
+
+    # Define the handlers
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'djangoapp.log',
+            'formatter': 'timestamp'
+        },
+
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+
+    # Define the loggers
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}
