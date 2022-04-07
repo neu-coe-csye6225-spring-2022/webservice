@@ -4,6 +4,8 @@ os: linux
 files:
   - source: ./app
     destination: /home/ec2-user/webservice/app
+  - source: ./cloudwatch-config.json
+    destination: /home/ec2-user/webservice
 
 
 hooks:
@@ -15,10 +17,10 @@ hooks:
   #   - location: ./code_deploy/install_app.sh
   #     timeout: 180
   #     runas: ec2-user
-  # AfterInstall:
-  #   - location: ./code_deploy/test.sh
-  #     timeout: 180
-  #     runas: ec2-user
+  AfterInstall:
+    - location: ./code_deploy/after_install.sh
+      timeout: 180
+      runas: ec2-user
   ApplicationStart:
     - location: ./start_webservice_centos.sh
       timeout: 180

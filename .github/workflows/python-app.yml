@@ -33,7 +33,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install flake8 pytest django djangorestframework bcrypt mysqlclient boto3 django-storages django-s3direct
+        pip install flake8 pytest django djangorestframework bcrypt mysqlclient boto3 django-storages django-s3direct statsd
 
     - name: Lint with flake8
       run: |
