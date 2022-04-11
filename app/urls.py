@@ -6,7 +6,7 @@ from app.views import HealthzViewSet, UserCreate, UserManage, ImageViewSet
 routers_healthz = routers.DefaultRouter()
 routers_healthz.register(r'healthz', HealthzViewSet)
 routers_img = routers.DefaultRouter()
-routers_img.register(r'v1/user/self/pic', ImageViewSet)
+routers_img.register(r'v2/user/self/pic', ImageViewSet)
 
 # routers_user = routers.DefaultRouter()
 # routers_user.register(r'v1/user', UserCreate)
@@ -15,6 +15,6 @@ routers_img.register(r'v1/user/self/pic', ImageViewSet)
 urlpatterns = [
     path('', include(routers_healthz.urls)),  # ip:port/healthz/
     path('', include(routers_img.urls)),
-    path('v1/user/', UserCreate.as_view()),  # ip:port/v1/user/
-    path('v1/user/self/', UserManage.as_view()),  # ip:port/v1/user/self/
+    path('v2/user/', UserCreate.as_view()),  # ip:port/v1/user/
+    path('v2/user/self/', UserManage.as_view()),  # ip:port/v1/user/self/
 ]
