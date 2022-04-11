@@ -34,7 +34,7 @@ class UserTest(APITestCase):
             "username": "jane.doe@example.com"
         }
 
-        response = self.client.post(self.base_url + "v1/user/", data, format='json')
+        response = self.client.post(self.base_url + "v2/user/", data, format='json')
 
         self.assertEqual(User.objects.count(), 2)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)  # user is created
@@ -56,7 +56,7 @@ class UserTest(APITestCase):
             "account_updated": timezone.now()
         }
 
-        response = self.client.post(self.base_url + "v1/user/", data, format='json')
+        response = self.client.post(self.base_url + "v2/user/", data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)  # user is created
         self.assertNotEqual(response.data['account_created'], data['account_created'])
@@ -70,10 +70,10 @@ class UserTest(APITestCase):
             "username": "jane.doe@example.com"
         }
 
-        response = self.client.post(self.base_url + "v1/user/", data, format='json')
+        response = self.client.post(self.base_url + "v2/user/", data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)  # user is created
 
-        response = self.client.post(self.base_url + "v1/user/", data, format='json')
+        response = self.client.post(self.base_url + "v2/user/", data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_create_user_without_first_name(self):
@@ -83,7 +83,7 @@ class UserTest(APITestCase):
             "username": "jane.doe@example.com"
         }
 
-        response = self.client.post(self.base_url + "v1/user/", data, format='json')
+        response = self.client.post(self.base_url + "v2/user/", data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -94,7 +94,7 @@ class UserTest(APITestCase):
             "username": "jane.doe@example.com"
         }
 
-        response = self.client.post(self.base_url + "v1/user/", data, format='json')
+        response = self.client.post(self.base_url + "v2/user/", data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -105,7 +105,7 @@ class UserTest(APITestCase):
             "username": "jane.doe@example.com"
         }
 
-        response = self.client.post(self.base_url + "v1/user/", data, format='json')
+        response = self.client.post(self.base_url + "v2/user/", data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -116,7 +116,7 @@ class UserTest(APITestCase):
             "password": "skdjfhskdfjhg",
         }
 
-        response = self.client.post(self.base_url + "v1/user/", data, format='json')
+        response = self.client.post(self.base_url + "v2/user/", data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -127,14 +127,14 @@ class UserTest(APITestCase):
             "username": "examplecom"
         }
 
-        response = self.client.post(self.base_url + "v1/user/", data, format='json')
+        response = self.client.post(self.base_url + "v2/user/", data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_get_user_info_with_token(self):
         client = APIClient()
         client.credentials(HTTP_AUTHORIZATION='Token ' + self.test_user_token.key)
-        response = client.get(self.base_url + "v1/user/self/")
+        response = client.get(self.base_url + "v2/user/self/")
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertFalse(response.data['username'] is None)
@@ -146,14 +146,14 @@ class UserTest(APITestCase):
         self.assertFalse('password' in response.data)
 
     def test_get_user_info_without_token(self):
-        response = self.client.get(self.base_url + "v1/user/self/")
+        response = self.client.get(self.base_url + "v2/user/self/")
 
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_get_user_info_with_wrong_token(self):
         client = APIClient()
         client.credentials(HTTP_AUTHORIZATION='Token ' + self.test_user_token.key + 'abc')
-        response = client.get(self.base_url + "v1/user/self/")
+        response = client.get(self.base_url + "v2/user/self/")
 
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
@@ -166,9 +166,9 @@ class UserTest(APITestCase):
 
         client = APIClient()
         client.credentials(HTTP_AUTHORIZATION='Token ' + self.test_user_token.key)
-        response = client.put(self.base_url + "v1/user/self/", data, format='json')
+        response = client.put(self.base_url + "v2/user/self/", data, format='json')
 
-        response_get = client.get(self.base_url + "v1/user/self/")
+        response_get = client.get(self.base_url + "v2/user/self/")
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(response_get.status_code, status.HTTP_200_OK)
@@ -185,7 +185,7 @@ class UserTest(APITestCase):
 
         client = APIClient()
         client.credentials(HTTP_AUTHORIZATION='Token ' + self.test_user_token.key)
-        response = client.put(self.base_url + "v1/user/self/", data, format='json')
+        response = client.put(self.base_url + "v2/user/self/", data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -199,7 +199,7 @@ class UserTest(APITestCase):
 
         client = APIClient()
         client.credentials(HTTP_AUTHORIZATION='Token ' + self.test_user_token.key)
-        response = client.put(self.base_url + "v1/user/self/", data, format='json')
+        response = client.put(self.base_url + "v2/user/self/", data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -213,7 +213,7 @@ class UserTest(APITestCase):
 
         client = APIClient()
         client.credentials(HTTP_AUTHORIZATION='Token ' + self.test_user_token.key)
-        response = client.put(self.base_url + "v1/user/self/", data, format='json')
+        response = client.put(self.base_url + "v2/user/self/", data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -224,7 +224,7 @@ class UserTest(APITestCase):
             "password": "skdjfhskdfjhgeee"
         }
 
-        response = self.client.put(self.base_url + "v1/user/self/", data, format='json')
+        response = self.client.put(self.base_url + "v2/user/self/", data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
@@ -237,6 +237,6 @@ class UserTest(APITestCase):
 
         client = APIClient()
         client.credentials(HTTP_AUTHORIZATION='Token ' + self.test_user_token.key + 'abc')
-        response = client.put(self.base_url + "v1/user/self/", data, format='json')
+        response = client.put(self.base_url + "v2/user/self/", data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
