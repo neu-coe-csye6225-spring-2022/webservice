@@ -113,6 +113,7 @@ class UserCreate(APIView):
             if user:
                 user.profile.account_updated = serializer.data['date_joined']
                 user.is_active = False
+                user.save()
 
                 output = {
                     'id': user.profile.ids,
@@ -171,6 +172,7 @@ class UserVerify(APIView):
                         db_token = res['Item']['token']
                         if db_token == token:
                             user.is_active = True
+                            user.save()
                             return Response(status=status.HTTP_200_OK)
                 except Exception:
                     return Response(status=status.HTTP_408_REQUEST_TIMEOUT)
