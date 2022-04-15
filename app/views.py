@@ -169,13 +169,17 @@ class UserVerify(APIView):
                 try:
                     res = dynamodb.get_item(Key={"user_id": username})
                     if "Item" in res.keys():
-                        db_token = res['Item']['token']
+                        item = res['Item']
+                        db_token = item['token']
+                        ts = item['expire_time']
+                        if ts < time.time():
+                            raise Exception
                         if db_token == token:
                             user.is_active = True
                             user.save()
                             return Response(status=status.HTTP_200_OK)
                 except Exception:
-                    return Response(status=status.HTTP_408_REQUEST_TIMEOUT)
+                    return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
